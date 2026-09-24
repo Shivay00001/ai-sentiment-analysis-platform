@@ -1,50 +1,39 @@
-# Ai Sentiment Analysis Platform
+# ai-sentiment-analysis-platform
 
-AI-powered sentiment analysis platform with Docker, CI/CD, and web UI
+Real sentiment analysis API. **Honest approach:** a VADER-style lexicon
+analyzer implemented from scratch (`sentiment.py`) — a curated valence
+lexicon plus the documented VADER heuristics: negations ("not good" flips),
+intensifiers/dampeners ("very", "slightly"), punctuation and ALL-CAPS
+emphasis, "but"-clause reweighting, and compound normalization. No ML model,
+no randomness: identical input always gives identical output.
 
-![Language](https://img.shields.io/badge/Language-HTML-blue)
-![Status](https://img.shields.io/badge/Status-Active-success)
-![License](https://img.shields.io/badge/License-MIT-green)
+## What it does
 
-## 🚀 Overview
+- `POST /analyze` — `{"text": "..."}` → `{"label", "compound", "pos", "neu", "neg"}`
+- `POST /analyze/batch` — up to 100 texts at once
+- `GET /health`
 
-Welcome to the **Ai Sentiment Analysis Platform** repository. This project is built to deliver a robust and scalable solution tailored to modern development standards.
+Labels: `positive` (compound ≥ 0.05), `negative` (compound ≤ −0.05),
+`neutral` otherwise.
 
-## ✨ Features
+## Run
 
-- **High Performance:** Optimized for speed and efficiency.
-- **Scalable Architecture:** Designed to grow with your needs.
-- **Clean Codebase:** Follows best practices and industry standards.
-- **Secure by Default:** Engineered with security in mind.
+```bash
+pip install -r requirements.txt
+uvicorn main:app --port 8002
+```
 
-## 🛠️ Prerequisites
+```bash
+curl -X POST http://localhost:8002/analyze -H 'Content-Type: application/json' \
+  -d '{"text":"I absolutely love this, it works perfectly!"}'
+# {"label":"positive","compound":0.86,...}
+```
 
-Ensure you have the following installed in your environment before proceeding:
-- Appropriate runtime/compiler for `HTML`
-- Standard development tools
+## Tests
 
-## 📦 Installation
+```bash
+python -m pytest tests/ -q
+```
 
-Follow standard installation steps for `HTML` to set up the project locally:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Shivay00001/ai-sentiment-analysis-platform.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd ai-sentiment-analysis-platform
-   ```
-3. Install dependencies according to the standard `HTML` ecosystem.
-
-## 💻 Usage
-
-Run the project using standard execution commands for `HTML`. Ensure all environment variables and configurations are set prior to execution.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📝 License
-
-This project is licensed under standard terms.
+Covers positive/negative/neutral sentences, negation flip, determinism,
+batch, and empty-input rejection. No API key needed — fully offline.
