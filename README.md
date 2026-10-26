@@ -37,3 +37,7 @@ python -m pytest tests/ -q
 
 Covers positive/negative/neutral sentences, negation flip, determinism,
 batch, and empty-input rejection. No API key needed — fully offline.
+
+## Built by VisionQuantech
+
+Part of the [VisionQuantech](https://visionquantech.com/) AI automation studio. See [AI automation services](https://visionquantech.com/ai-automation-services) and the comparison of [AI chatbot vs live chat for small business](https://visionquantech.com/blog/ai-chatbot-vs-live-chat-small-business).
